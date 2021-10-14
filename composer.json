@@ -1,0 +1,21 @@
+{
+    "name": "mark_borodin/logger",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mark",
+            "email": "rens2588@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "psr/log": "^1.1",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app"
+        }
+    }
+}
