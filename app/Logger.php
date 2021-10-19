@@ -16,10 +16,6 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @var string path to file
      */
     public string $pathToFile;
-    /**
-     * @var string massage template
-     */
-    public string $template = "{date} {level} {message} {context}";
 
     public function __construct(string $pathToFile)
     {
@@ -46,7 +42,8 @@ class Logger extends AbstractLogger implements LoggerInterface
 
     /**
      * $context to string
-     *
+     * @param $level
+     * @param $message
      * @param array $context
      * @return string
      */
@@ -57,25 +54,23 @@ class Logger extends AbstractLogger implements LoggerInterface
         return $data;
     }
 
+    public function write($data)
+    {
+        file_put_contents($this->pathToFile, $data, FILE_APPEND);
+    }
+
     /**
      * Logs with an arbitrary level.
      *
      * @param mixed $level
      * @param string $message
      * @param array $context
-     *
      * @return void
-     *
      * @throws InvalidArgumentException
      */
     public function log($level, $message, array $context = array())
     {
         $data = $this->format($level, $message, $context);
         $this->write($data);
-    }
-
-    public function write($data)
-    {
-        file_put_contents($this->pathToFile, $data, FILE_APPEND);
     }
 }
