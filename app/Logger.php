@@ -50,9 +50,11 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @param array $context
      * @return string
      */
-    public function format(array $context = []): ?string
+    public function format($level, $message, array $context): ?string
     {
-        return !empty($context) ? json_encode($context) : null;
+        $data = '[' . $this->getDate() . ']' . '[' . $level . ']' . '[' . $message . ']';
+        $data .= json_encode($context);
+        return $data;
     }
 
     /**
@@ -68,16 +70,12 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        $this->write($level, $message, $context);
+        $data = $this->format($level, $message, $context);
+        $this->write($data);
     }
 
-    public function write($level, $message, array $context = array())
+    public function write($data)
     {
-        file_put_contents($this->pathToFile, trim(strtr($this->template, [
-                '{date}' => $this->getDate(),
-                '{level}' => $level,
-                '{message}' => $message,
-                '{context}' => $this->format($context),
-            ])) . PHP_EOL, FILE_APPEND);
+        file_put_contents($this->pathToFile, $data, FILE_APPEND);
     }
 }
